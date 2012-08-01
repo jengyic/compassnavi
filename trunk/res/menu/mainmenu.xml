@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"><item android:title="@string/menu_target" android:id="@+id/menu_target" android:icon="@android:drawable/ic_menu_compass"></item>
+
+
+<item android:id="@+id/menu_preferences" android:title="@string/menu_preferences" android:icon="@android:drawable/ic_menu_preferences"></item>
+<item android:id="@+id/menu_sat_info" android:title="@string/menu_sat_info" android:icon="@android:drawable/ic_menu_info_details"></item>
+</menu>

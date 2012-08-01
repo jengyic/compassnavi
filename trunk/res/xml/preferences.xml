@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/prefcat_gps">
+	<ListPreference
+		android:key="bearingProviderPref"
+		android:defaultValue="Compass"
+		android:entries="@array/bearingItems"
+		android:entryValues="@array/bearingValues" android:summary="@string/pref_bearing_provider_summary" android:title="@string/pref_bearing_provider"/>
+	<Preference
+		android:title="@string/menu_gps_settings"
+		android:key="andGPSPref" android:summary="@string/pref_and_gps_setting_summary"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/prefcat_units">
+	<ListPreference
+		android:key="distUnitPref"
+		android:defaultValue="meter"
+		android:entries="@array/unitItems"
+		android:entryValues="@array/unitValues" android:summary="@string/pref_unit_description" android:title="@string/pref_distance"/>
+	<ListPreference
+		android:key="altUnitPref"
+		android:defaultValue="meter"
+		android:entries="@array/unitItems"
+		android:entryValues="@array/unitValues" android:summary="@string/pref_unit_description" android:title="@string/pref_altitude"/>
+  </PreferenceCategory>
+<PreferenceCategory android:title="@string/prefcat_misc"><CheckBoxPreference android:key="keepScreenOn" android:summary="@string/pref_keep_screen_on_summary" android:title="@string/pref_keep_screen_on"></CheckBoxPreference>
+<EditTextPreference android:key="minTime" android:defaultValue="500" android:summary="@string/pref_min_time_summary" android:title="@string/pref_min_time"></EditTextPreference>
+<EditTextPreference android:key="minDistance" android:defaultValue="0.5" android:summary="@string/pref_min_distance_summary" android:title="@string/pref_min_distance"></EditTextPreference>
+</PreferenceCategory>
+</PreferenceScreen>

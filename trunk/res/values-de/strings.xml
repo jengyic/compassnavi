@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">CompassNavi</string>
+<string name="menu_target">Set Target</string>
+<string name="menu_toggle">Heading Provider</string>
+<string name="menu_toggle_compass">Compass</string>
+<string name="menu_toggle_gps">GPS</string>
+<string name="menu_gps_settings">GPS Settings</string>
+<string name="menu_preferences">Preferences</string>
+<string name="pref_distance">Distance</string>
+<string name="pref_altitude">Altitude</string>
+<string name="pref_unit_description">Select metric or US settings</string>
+<string name="pref_min_distance">GPS update minimum distance</string>
+<string name="pref_min_distance_summary">Minimum distance for updates in meters (minimum : 0, default : 0.5)</string>
+<string name="pref_min_time">GPS update time interval</string>
+<string name="pref_min_time_summary">Minimum time interval for updates in milliseconds (0 = fastest, 500 = default)</string>
+<string name="pref_keep_screen_on">Keep screen on</string>
+<string name="pref_keep_screen_on_summary">Disables screen saver</string>
+<string name="pref_bearing_provider">Bearing provider</string>
+<string name="pref_bearing_provider_summary">Select GPS or compass as bearing provider</string>
+<string name="pref_and_gps_setting_summary">Android location preferences</string>
+<string name="prefcat_gps">GPS</string>
+<string name="prefcat_units">Units</string>
+<string name="prefcat_misc">Misc</string>
+<string name="menu_sat_info">Satellite Information</string>
+<string name="cancel">Abbrechen</string>
+<string name="ok">OK</string>
+</resources>

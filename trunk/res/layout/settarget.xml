@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="horizontal">
+<TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent"><TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="3px"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Name:" android:gravity="right"></TextView>
+<EditText android:layout_height="wrap_content" android:id="@+id/TargetName" android:inputType="text" android:layout_width="wrap_content"></EditText>
+</TableRow>
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="3px"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="right" android:text="Latitude:"></TextView>
+<EditText android:layout_height="wrap_content" android:id="@+id/TargetLatitude" android:layout_width="wrap_content" android:inputType="text"></EditText>
+</TableRow>
+
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="3px"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Longitude:"></TextView>
+<EditText android:layout_height="wrap_content" android:id="@+id/TargetLongitude" android:layout_width="wrap_content" android:inputType="text"></EditText>
+</TableRow>
+</TableLayout>
+
+</LinearLayout>

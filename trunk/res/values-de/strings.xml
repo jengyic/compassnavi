@@ -2,12 +2,12 @@
 <resources>
     
     <string name="app_name">CompassNavi</string>
-<string name="menu_target">Set Target</string>
+<string name="menu_target">Ziel-Eingabe</string>
 <string name="menu_toggle">Heading Provider</string>
-<string name="menu_toggle_compass">Compass</string>
+<string name="menu_toggle_compass">Kompass</string>
 <string name="menu_toggle_gps">GPS</string>
-<string name="menu_gps_settings">GPS Settings</string>
-<string name="menu_preferences">Preferences</string>
+<string name="menu_gps_settings">GPS Einstellungen</string>
+<string name="menu_preferences">Einstellungen</string>
 <string name="pref_distance">Distance</string>
 <string name="pref_altitude">Altitude</string>
 <string name="pref_unit_description">Select metric or US settings</string>
@@ -21,9 +21,9 @@
 <string name="pref_bearing_provider_summary">Select GPS or compass as bearing provider</string>
 <string name="pref_and_gps_setting_summary">Android location preferences</string>
 <string name="prefcat_gps">GPS</string>
-<string name="prefcat_units">Units</string>
-<string name="prefcat_misc">Misc</string>
-<string name="menu_sat_info">Satellite Information</string>
+<string name="prefcat_units">Einheiten</string>
+<string name="prefcat_misc">Verschiedenes</string>
+<string name="menu_sat_info">Satelliten-Information</string>
 <string name="cancel">Abbrechen</string>
-<string name="ok">OK</string>
+<string name="ok">OK</string><string name="prefcat_advanced">Erweitert</string><string name="pref_comp_smooth_avg_window">Kompass Fenstergrösse gleitender Durchschnitt</string><string name="pref_comp_smooth_avg_window_summary">Wie viele Werte sollen für den gleitenden Durchschnitt verwendet werden</string><string name="pref_comp_use_weighted_avg">Gewichteten Durchschnitt verwenden</string>
 </resources>

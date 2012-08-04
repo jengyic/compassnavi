@@ -7,8 +7,16 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
 
-public class Preferences extends PreferenceActivity {
-
+/**
+ * 
+ * @author Martin Preishuber
+ *
+ */
+public class Preferences extends PreferenceActivity 
+{
+	/**
+	 * 
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -17,12 +25,12 @@ public class Preferences extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.preferences);
 		
 		// Invoke android gps preferences
-		Preference customPref = (Preference) findPreference("andGPSPref");
+		final Preference customPref = (Preference) findPreference("andGPSPref");
 		customPref.setOnPreferenceClickListener(new OnPreferenceClickListener() 
 		{ 
-			public boolean onPreferenceClick(Preference preference) 
+			public boolean onPreferenceClick(final Preference preference) 
 			{
-    			Intent intLocSrcSettings = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+    			final Intent intLocSrcSettings = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
     			startActivity(intLocSrcSettings);
 				return true;
 			}		 

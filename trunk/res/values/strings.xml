@@ -26,4 +26,8 @@
 <string name="menu_sat_info">Satellite Information</string>
 <string name="cancel">Cancel</string>
 <string name="ok">OK</string>
+<string name="prefcat_advanced">Advanced</string>
+<string name="pref_comp_smooth_avg_window">Compass moving average window size</string>
+<string name="pref_comp_smooth_avg_window_summary">How many values shall be used for moving average calculation</string>
+<string name="pref_comp_use_weighted_avg">Use weighted average</string>
 </resources>

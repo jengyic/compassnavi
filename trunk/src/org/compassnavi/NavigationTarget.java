@@ -1,7 +1,6 @@
 package org.compassnavi;
 
 import android.location.Location;
-import org.compassnavi.R;
 
 /**
  * 

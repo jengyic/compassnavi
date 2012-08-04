@@ -2,7 +2,6 @@ package org.compassnavi;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import org.compassnavi.R;
 
 public class GravityMovingAverage 
 {

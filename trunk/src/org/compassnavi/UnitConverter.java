@@ -1,7 +1,6 @@
 package org.compassnavi;
 
 import java.util.Hashtable;
-import org.compassnavi.R;
 
 /**
  * 

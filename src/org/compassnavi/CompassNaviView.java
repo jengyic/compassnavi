@@ -3,7 +3,6 @@ package org.compassnavi;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
-import org.compassnavi.R;
 
 import android.content.Context;
 import android.graphics.Canvas;

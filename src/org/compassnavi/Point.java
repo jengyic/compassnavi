@@ -1,7 +1,5 @@
 package org.compassnavi;
 
-import org.compassnavi.R;
-
 /**
  * 
  * @author Martin Preishuber

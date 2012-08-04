@@ -1,7 +1,6 @@
 package org.compassnavi;
 
 import java.util.LinkedList;
-import org.compassnavi.R;
 
 /**
  * 

@@ -2,7 +2,6 @@ package org.compassnavi;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.compassnavi.R;
 
 /**
  * 

@@ -61,6 +61,8 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 	private static final String PREFS_KEY_KEEP_SCREEN_ON = "keepScreenOn";
 	private static final String PREFS_KEY_GPS_MIN_TIME = "minTime";
 	private static final String PREFS_KEY_GPS_MIN_DISTANCE = "minDistance";
+	private static final String PREFS_KEY_AVG_WINDOW_SIZE = "compSmoothAvg";
+	private static final String PREFS_KEY_USE_WEIGHTED_AVG = "useWeightedAverage";
 	
 	// Some default values
 	private static final String PREFS_DEFAULT_BEARING_PROVIDER = BearingProvider.Compass.toString();
@@ -69,6 +71,8 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 	private static final boolean PREFS_DEFAULT_KEEP_SCREEN_ON = false;
 	private static final int PREFS_DEFAULT_GPS_MIN_TIME = 500;
 	private static final float PREFS_DEFAULT_GPS_MIN_DISTANCE = 0.5f;
+	private static final int PREFS_DEFAULT_AVG_WINDOW_SIZE = 5;
+	private static final boolean PREFS_DEFAULT_USE_WEIGHTED_AVG = false;
 	
 	private static final String DEFAULT_TARGET_NAME = "Unnamed";
 	private static final float  DEFAULT_TARGET_LATITUDE = 0.0f;
@@ -134,12 +138,10 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 
         setContentView(R.layout.navicompass);
         this.mCompassNaviView = (CompassNaviView) this.findViewById(R.id.CompassNaviView);
-        // this.mCompassNaviView.setLocationManager(this.mLocationManager);
         this.mCompassNaviView.setTarget(this.mNavigationTarget);
-        
+
+        // Create new instance for compass smoothing
 		this.mGravityMovingAverage = new GravityMovingAverage();
-		this.mGravityMovingAverage.setWindowSize(5);
-		this.mGravityMovingAverage.setUseWeightedAverage(false);
 
 		// Create a random azimuth value in emulator
 		if (ApplicationSingleton.getInstance().isEmulator())
@@ -211,11 +213,11 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
     	}
     	
     	// Orientation (compass)
-    	 this.mGravityMovingAverage.clear();
+    	this.mGravityMovingAverage.clear();
+    	this.mGravityMovingAverage.setWindowSize(this.mSharedPreferences.getInt(PREFS_KEY_AVG_WINDOW_SIZE, PREFS_DEFAULT_AVG_WINDOW_SIZE));
+ 		this.mGravityMovingAverage.setUseWeightedAverage(this.mSharedPreferences.getBoolean(PREFS_KEY_USE_WEIGHTED_AVG, PREFS_DEFAULT_USE_WEIGHTED_AVG));
+    	 
     	// Sensor sensorOrientation = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-    	// this.mSensorManager.registerListener(this.mCompassNaviView, sensorOrientation, SensorManager.SENSOR_DELAY_UI);
-    	// this.mSensorManager.registerListener(this.mCompassNaviView, this.mSensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-    	// this.mSensorManager.registerListener(this.mCompassNaviView, this.mSensorMagneticField, SensorManager.SENSOR_DELAY_UI);
     	this.mSensorManager.registerListener(this, this.mSensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     	this.mSensorManager.registerListener(this, this.mSensorMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
 

@@ -23,11 +23,27 @@
 		android:entryValues="@array/unitValues" android:summary="@string/pref_unit_description" android:title="@string/pref_altitude"/>
   </PreferenceCategory>
 <PreferenceCategory android:title="@string/prefcat_misc"><CheckBoxPreference android:key="keepScreenOn" android:summary="@string/pref_keep_screen_on_summary" android:title="@string/pref_keep_screen_on" android:defaultValue="false"></CheckBoxPreference>
-<EditTextPreference android:key="minTime" android:defaultValue="500" android:summary="@string/pref_min_time_summary" android:title="@string/pref_min_time"></EditTextPreference>
-<EditTextPreference android:key="minDistance" android:defaultValue="0.5" android:summary="@string/pref_min_distance_summary" android:title="@string/pref_min_distance"></EditTextPreference>
+<EditTextPreference 
+    android:key="minTime" 
+    android:defaultValue="500" 
+    android:summary="@string/pref_min_time_summary" 
+    android:title="@string/pref_min_time"
+    android:inputType="number" />
+
+<EditTextPreference 
+    android:key="minDistance" 
+    android:defaultValue="0.5" 
+    android:summary="@string/pref_min_distance_summary" 
+    android:title="@string/pref_min_distance"
+    android:inputType="numberDecimal" />
 </PreferenceCategory>
 <PreferenceCategory android:title="@string/prefcat_advanced">
-    <EditTextPreference android:key="compSmoothAvg" android:title="@string/pref_comp_smooth_avg_window" android:summary="@string/pref_comp_smooth_avg_window_summary" android:defaultValue="5"/>
+    <EditTextPreference 
+        android:key="compSmoothAvg" 
+        android:title="@string/pref_comp_smooth_avg_window" 
+        android:summary="@string/pref_comp_smooth_avg_window_summary" 
+        android:defaultValue="5"
+        android:inputType="number" />
     <CheckBoxPreference android:key="useWeightedAverage" android:title="@string/pref_comp_use_weighted_avg" android:defaultValue="false"/>
 </PreferenceCategory>
 </PreferenceScreen>

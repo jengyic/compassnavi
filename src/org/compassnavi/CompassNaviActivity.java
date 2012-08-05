@@ -189,35 +189,16 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
     	super.onResume();
 
     	// Read GPS minimum time preferences
-		final String strMinTime = this.mSharedPreferences.getString(PREFS_KEY_GPS_MIN_TIME, Integer.toString(PREFS_DEFAULT_GPS_MIN_TIME));
-		int intMinTime = PREFS_DEFAULT_GPS_MIN_TIME;
-		try 
-		{
-			intMinTime = Integer.parseInt(strMinTime);
-		} 
-		catch (NumberFormatException nfe)
-		{
-			Toast.makeText(this, "Invalid number in GPS min time interval: " + strMinTime + " (using default value)", Toast.LENGTH_LONG).show();
-		}
-		
+		final int intMinTime = this.getIntegerPreferenceValue(PREFS_KEY_GPS_MIN_TIME, PREFS_DEFAULT_GPS_MIN_TIME, R.string.pref_min_time);
 		// Read GPS minimum distance preference
-		final String strMinDistance = this.mSharedPreferences.getString(PREFS_KEY_GPS_MIN_DISTANCE, Float.toString(PREFS_DEFAULT_GPS_MIN_DISTANCE));
-    	float fltMinDistance = PREFS_DEFAULT_GPS_MIN_DISTANCE;
-    	try 
-    	{
-        	fltMinDistance = Float.parseFloat(strMinDistance);
-    	}
-    	catch (NumberFormatException nfe)
-    	{
-			Toast.makeText(this, "Invalid number in GPS min distance interval: " + strMinDistance + " (using default value)", Toast.LENGTH_LONG).show();    		
-    	}
+    	final float fltMinDistance = this.getFloatPreferenceValue(PREFS_KEY_GPS_MIN_DISTANCE, PREFS_DEFAULT_GPS_MIN_DISTANCE, R.string.pref_min_distance);
     	
     	// Orientation (compass)
     	this.mGravityMovingAverage.clear();
-    	this.mGravityMovingAverage.setWindowSize(this.mSharedPreferences.getInt(PREFS_KEY_AVG_WINDOW_SIZE, PREFS_DEFAULT_AVG_WINDOW_SIZE));
+		final int intWindowSize = this.getIntegerPreferenceValue(PREFS_KEY_AVG_WINDOW_SIZE, PREFS_DEFAULT_AVG_WINDOW_SIZE, R.string.pref_comp_smooth_avg_window);
+    	this.mGravityMovingAverage.setWindowSize(intWindowSize);
  		this.mGravityMovingAverage.setUseWeightedAverage(this.mSharedPreferences.getBoolean(PREFS_KEY_USE_WEIGHTED_AVG, PREFS_DEFAULT_USE_WEIGHTED_AVG));
-    	 
-    	// Sensor sensorOrientation = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+
     	this.mSensorManager.registerListener(this, this.mSensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     	this.mSensorManager.registerListener(this, this.mSensorMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -232,6 +213,54 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 		this.mCompassNaviView.setKeepScreenOn(blnKeepScreenOn);		
     }
 
+    /**
+     * 
+     * @param key
+     * @param defValue
+     * @param resid
+     * @return
+     */
+    private int getIntegerPreferenceValue(String key, int defValue, int resid)
+    {
+    	final String stringValue = this.mSharedPreferences.getString(key, Integer.toString(defValue));
+		int value = defValue;
+		try 
+		{
+			value = Integer.parseInt(stringValue);
+		} 
+		catch (NumberFormatException nfe)
+		{
+			final String title = getString(resid);
+			final String errorMessage = String.format("Invalid integer value for preference %s: %s (using default value)", title, stringValue);
+			Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+		}
+    	return value;
+    }
+
+    /**
+     * 
+     * @param key
+     * @param defValue
+     * @param resid
+     * @return
+     */
+    private float getFloatPreferenceValue(String key, float defValue, int resid)
+    {
+    	final String stringValue = this.mSharedPreferences.getString(key, Float.toString(defValue));
+		float value = defValue;
+		try 
+		{
+			value = Float.parseFloat(stringValue);
+		} 
+		catch (NumberFormatException nfe)
+		{
+			final String title = getString(resid);
+			final String errorMessage = String.format("Invalid float value for preference %s: %s (using default value)", title, stringValue);
+			Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+		}
+    	return value;
+    }
+    
     /**
      * 
      */

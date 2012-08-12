@@ -1,5 +1,7 @@
 package org.compassnavi;
 
+import java.util.Date;
+
 import android.location.Location;
 
 /**
@@ -9,10 +11,12 @@ import android.location.Location;
  */
 public class NavigationTarget extends Location
 {
-	
 	private static final int NAME_MAX_CHARS = 16;
 
-	private String mstrName = "";
+	private String mName = "";
+	private Date mDateCreated;
+	private Date mDateLastAccess;
+	private Long mId = Long.MIN_VALUE;
 
 	/**
 	 * 
@@ -33,6 +37,24 @@ public class NavigationTarget extends Location
 
 	/**
 	 * 
+	 * @return
+	 */
+	public long getId() 
+	{
+		return this.mId;
+	}
+
+	/**
+	 * 
+	 * @param id
+	 */
+	public void setId(long id) 
+	{
+		this.mId = id;
+	}
+		  
+	/**
+	 * 
 	 * @param name
 	 */
 	public void setName(String name)
@@ -44,9 +66,54 @@ public class NavigationTarget extends Location
     		if (intIndexOfBlank != -1)
     			name = name.substring(0, intIndexOfBlank);
     	}
-		this.mstrName = name;
+		this.mName = name;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public String getName()
+	{
+		return this.mName;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Date getDateCreated()
+	{
+		return this.mDateCreated;
+	}
+	
+	/**
+	 * 
+	 * @param date
+	 */
+	public void setDateCreated(Date date)
+	{
+		this.mDateCreated = date;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Date getDateLastAccess()
+	{
+		return this.mDateLastAccess;
+	}
+	
+	/**
+	 * 
+	 * @param date
+	 */
+	public void setDateLastAccess(Date date)
+	{
+		this.mDateLastAccess = date;
+	}
+	
 	/**
 	 * 
 	 * @param latitude
@@ -54,15 +121,11 @@ public class NavigationTarget extends Location
 	public void setLatitude(Object latitude)
 	{
 		if (latitude instanceof Double)
-		{
 			super.setLatitude((Double) latitude);
-		}
 		else if (latitude instanceof Float)
-		{
 			super.setLatitude(((Float) latitude).doubleValue());
-		}
 	}
-	
+		
 	/**
 	 * 
 	 * @param longitude
@@ -70,30 +133,8 @@ public class NavigationTarget extends Location
 	public void setLongitude(Object longitude)
 	{
 		if (longitude instanceof Double)
-		{
-			super.setLongitude((Double) longitude);
-		}
+			super.setLongitude((Double) longitude);	
 		else if (longitude instanceof Float)
-		{
-			super.setLongitude(((Float) longitude).doubleValue());
-		}
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public String getName()
-	{
-		return this.mstrName;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public String getLatitudeString()
-	{
-		return this.mstrName;
+			super.setLongitude(((Float) longitude).doubleValue());	
 	}
 }

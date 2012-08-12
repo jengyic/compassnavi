@@ -83,20 +83,14 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 	
 	// Compass values
 	float[] inR = new float[16];
-	// float[] outR = new float[16];
 	float[] I = new float[16];
-	// float[] gravity = new float[3];
 	float[] gravity;
 	float[] geomag = new float[3];
 	float[] orientVals = new float[3];
 
 	double azimuth = 0;
-	// double pitch = 0;
-	// double roll = 0;
 	
 	static final float ALPHA = 0.2f;
-
-	// protected float[] accelVals;
 	
     /** Called when the activity is first created. */
     @Override

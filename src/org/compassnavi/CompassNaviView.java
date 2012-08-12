@@ -36,9 +36,9 @@ public class CompassNaviView extends View
 	private Paint mArrowTextPaint;
 	private Paint mCenterPaint;
 
-	private int DeltaYCompass = 40;
+	private CompassLayout mCompassLayout;
+	
 	private int DeltaYCompassValues = 18;
-	private int DeltaYTargetInformation = 15;
 	private int DeltaYGpsInformation = 65;
 
 	protected final Picture mStaticLayout = new Picture();
@@ -96,10 +96,10 @@ public class CompassNaviView extends View
 		this.mDisplayWidthInPixel = this.mContext.getResources().getDisplayMetrics().widthPixels;
 		this.mDisplayHeightInPixel = this.mContext.getResources().getDisplayMetrics().heightPixels;
 		this.mDisplayScaledDensity = this.mContext.getResources().getDisplayMetrics().scaledDensity;
+		
+		this.mCompassLayout = new CompassLayout(this.mDisplayWidthInPixel, this.mDisplayHeightInPixel, this.mDisplayScaledDensity);
 
-		DeltaYCompass = (int)(40 * this.mDisplayScaledDensity);
 		DeltaYCompassValues = (int)(18 * this.mDisplayScaledDensity);
-		DeltaYTargetInformation = (int)(15 * this.mDisplayScaledDensity);
 		DeltaYGpsInformation = (int)(65 * this.mDisplayScaledDensity);
 
 		this.definePaints();
@@ -112,7 +112,6 @@ public class CompassNaviView extends View
 	private void definePaints()
 	{
 		// Compass main paint (outer circle and lines)
-				
 		this.mArrowPaint = new Paint();
 		this.mArrowPaint.setColor(Color.RED);
 		this.mArrowPaint.setAntiAlias(true);
@@ -221,37 +220,31 @@ public class CompassNaviView extends View
 		compassMainPaintOrange.setStrokeWidth(2.0f);
 
 		// Draw target header
-		int intY = DeltaYTargetInformation;
-		
-		canvas.drawText("Target", 10 * this.mDisplayScaledDensity, intY, textHeaderPaint);
-		canvas.drawText("Latitude", width / 2 - 35 * this.mDisplayScaledDensity, intY, textHeaderPaint);
-		canvas.drawText("Longitude", width - 100 * this.mDisplayScaledDensity, intY, textHeaderPaint);
+		canvas.drawText("Target", this.mCompassLayout.FirstColumnX, this.mCompassLayout.TargetInformationTargetHeaderY, textHeaderPaint);
+		canvas.drawText("Latitude", width / 2 - 35 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationTargetHeaderY, textHeaderPaint);
+		canvas.drawText("Longitude", width - 100 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationTargetHeaderY, textHeaderPaint);
 
-		canvas.drawText("Distance", 10 * this.mDisplayScaledDensity, intY + 34 * this.mDisplayScaledDensity, textHeaderPaint);
-		canvas.drawText("Bearing", width - 50 * this.mDisplayScaledDensity, intY + 34 * this.mDisplayScaledDensity, textHeaderPaint);
-		
+		canvas.drawText("Distance", this.mCompassLayout.FirstColumnX, this.mCompassLayout.TargetInformationBearingHeaderY, textHeaderPaint);
+		canvas.drawText("Bearing", width - 50 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationBearingHeaderY, textHeaderPaint);
+
 		// Draw compass layout (circles)
-		final int intCenterX = width / 2;
-		final int intCenterY = width / 2 + DeltaYCompass;
-		final int intRadius = intCenterX - (int)(30 * this.mDisplayScaledDensity);
-
-		canvas.drawCircle(intCenterX, intCenterY, intRadius, compassMainPaint);
-		canvas.drawCircle(intCenterX, intCenterY, intRadius * 2/3, compassInnerPaint);
-		canvas.drawCircle(intCenterX, intCenterY, intRadius * 1/3, compassInnerPaint);
+		canvas.drawCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadius, compassMainPaint);
+		canvas.drawCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadiusTwoThirds, compassInnerPaint);
+		canvas.drawCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadiusOneThird, compassInnerPaint);
 
 		// Draw compass lines N-S and W-E
-		canvas.drawLine(intCenterX, intCenterY - (intRadius * 2/3) + 5 * this.mDisplayScaledDensity, intCenterX, intCenterY + (intRadius * 2/3) - 5 * this.mDisplayScaledDensity, compassMainPaint);
-		canvas.drawLine(intCenterX - (intRadius * 2/3) + 5 * this.mDisplayScaledDensity, intCenterY, intCenterX + (intRadius * 2/3) - 5 * this.mDisplayScaledDensity, intCenterY, compassMainPaint);
+		canvas.drawLine(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY - this.mCompassLayout.CompassRadiusTwoThirds + 5 * this.mDisplayScaledDensity, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY + this.mCompassLayout.CompassRadiusTwoThirds - 5 * this.mDisplayScaledDensity, compassMainPaint);
+		canvas.drawLine(this.mCompassLayout.CompassCenterX - this.mCompassLayout.CompassRadiusTwoThirds + 5 * this.mDisplayScaledDensity, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassCenterX + this.mCompassLayout.CompassRadiusTwoThirds - 5 * this.mDisplayScaledDensity, this.mCompassLayout.CompassCenterY, compassMainPaint);
 		
-		final int intRadiusOuterMainDegreeValue = intRadius - (int)(18 * this.mDisplayScaledDensity);
-		final int intRadiusOuterMinorDegreeValues = intRadius - (int)(15 * this.mDisplayScaledDensity);
-		final int intCompassLetterRadius = (intRadius * 2/3) + (int)(10 * this.mDisplayScaledDensity);
-		final int intInnerMarkShortRadiusFrom = (intRadius * 1/3) - (int)(5 * this.mDisplayScaledDensity);
-		final int intInnerMarkShortRadiusTo = (intRadius * 1/3) + (int)(5 * this.mDisplayScaledDensity);
-		final int intMiddleMarkShortRadiusFrom = (intRadius * 2/3) - (int)(5 * this.mDisplayScaledDensity);
-		final int intMiddleMarkShortRadiusTo = (intRadius * 2/3) + (int)(5 * this.mDisplayScaledDensity);
-		final int intOuterMarkShortRadiusFrom = intRadius - (int)(5 * this.mDisplayScaledDensity);
-		final int intOuterMarkShortRadiusTo = intRadius + (int)(5 * this.mDisplayScaledDensity);
+		final int intRadiusOuterMainDegreeValue = this.mCompassLayout.CompassRadius - (int)(18 * this.mDisplayScaledDensity);
+		final int intRadiusOuterMinorDegreeValues = this.mCompassLayout.CompassRadius - (int)(15 * this.mDisplayScaledDensity);
+		final int intCompassLetterRadius = this.mCompassLayout.CompassRadiusTwoThirds + (int)(10 * this.mDisplayScaledDensity);
+		final int intInnerMarkShortRadiusFrom = this.mCompassLayout.CompassRadiusOneThird - (int)(5 * this.mDisplayScaledDensity);
+		final int intInnerMarkShortRadiusTo = this.mCompassLayout.CompassRadiusOneThird + (int)(5 * this.mDisplayScaledDensity);
+		final int intMiddleMarkShortRadiusFrom = this.mCompassLayout.CompassRadiusTwoThirds - (int)(5 * this.mDisplayScaledDensity);
+		final int intMiddleMarkShortRadiusTo = this.mCompassLayout.CompassRadiusTwoThirds + (int)(5 * this.mDisplayScaledDensity);
+		final int intOuterMarkShortRadiusFrom = this.mCompassLayout.CompassRadius - (int)(5 * this.mDisplayScaledDensity);
+		final int intOuterMarkShortRadiusTo = this.mCompassLayout.CompassRadius + (int)(5 * this.mDisplayScaledDensity);
 		
 		for (int i = 0; i < 360; i += 15)
 		{
@@ -259,46 +252,46 @@ public class CompassNaviView extends View
 			if ((i % 90) == 0)
 			{
 				// Draw main coordinate letters (N,S,E,W)
-				this.drawRotatedTextOnCircle(canvas, intCenterX, intCenterY, intCompassLetterRadius, i, this.getDirectionForDegrees(i), coordsMainPaint);
+				this.drawRotatedTextOnCircle(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intCompassLetterRadius, i, this.getDirectionForDegrees(i), coordsMainPaint);
 				// Draw minor coordinate letters (NE, SE, SW, NW)
-				this.drawRotatedTextOnCircle(canvas, intCenterX, intCenterY, intCompassLetterRadius, i + 45, this.getDirectionForDegrees(i + 45), coordsMinorPaint);
+				this.drawRotatedTextOnCircle(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intCompassLetterRadius, i + 45, this.getDirectionForDegrees(i + 45), coordsMinorPaint);
 				// Draw degree value inside outer line
-				this.drawRotatedTextOnCircle(canvas, intCenterX, intCenterY, intRadiusOuterMainDegreeValue, i, Integer.toString(i), coordsMainPaint);
+				this.drawRotatedTextOnCircle(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intRadiusOuterMainDegreeValue, i, Integer.toString(i), coordsMainPaint);
 				// Draw short mark lines for N,S,E,W
-				this.drawShortLine(canvas, intCenterX, intCenterY, intInnerMarkShortRadiusFrom, intInnerMarkShortRadiusTo, i, compassMainPaintOrange);
-				this.drawShortLine(canvas, intCenterX, intCenterY, intMiddleMarkShortRadiusFrom, intMiddleMarkShortRadiusTo, i, compassMainPaintOrange);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intInnerMarkShortRadiusFrom, intInnerMarkShortRadiusTo, i, compassMainPaintOrange);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intMiddleMarkShortRadiusFrom, intMiddleMarkShortRadiusTo, i, compassMainPaintOrange);
 				// Draw short marker lines for NE, NW, SE, SW
-				this.drawShortLine(canvas, intCenterX, intCenterY, intInnerMarkShortRadiusFrom, intInnerMarkShortRadiusTo, i + 45, compassMainPaint);
-				this.drawShortLine(canvas, intCenterX, intCenterY, intMiddleMarkShortRadiusFrom, intMiddleMarkShortRadiusTo, i + 45, compassMainPaint);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intInnerMarkShortRadiusFrom, intInnerMarkShortRadiusTo, i + 45, compassMainPaint);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intMiddleMarkShortRadiusFrom, intMiddleMarkShortRadiusTo, i + 45, compassMainPaint);
 				// Draw short marker lines on degree scale (outer line)
-				this.drawShortLine(canvas, intCenterX, intCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i, compassMainPaintOrange);
-				this.drawShortLine(canvas, intCenterX, intCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i + 45, compassMainPaint);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i, compassMainPaintOrange);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i + 45, compassMainPaint);
 			} 
 			else
 			{
 				// Draw degree value (15, 30, etc.)
-				this.drawRotatedTextOnCircle(canvas, intCenterX, intCenterY, intRadiusOuterMinorDegreeValues, i, Integer.toString(i), coordsMinorPaint);
+				this.drawRotatedTextOnCircle(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intRadiusOuterMinorDegreeValues, i, Integer.toString(i), coordsMinorPaint);
 				// Draw short marks on degree scale (outer line)
-				this.drawShortLine(canvas, intCenterX, intCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i, compassInnerPaint);
+				this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, intOuterMarkShortRadiusFrom, intOuterMarkShortRadiusTo, i, compassInnerPaint);
 			}
 		}
 		
 		// Draw compass value header
-		intY = width + DeltaYCompassValues;
+		int intY = width + DeltaYCompassValues;
 		
-		canvas.drawText("Heading", 10 * this.mDisplayScaledDensity, intY, textHeaderPaint);
+		canvas.drawText("Heading", this.mCompassLayout.FirstColumnX, intY, textHeaderPaint);
 		canvas.drawText("Orientation", width - 50 * this.mDisplayScaledDensity, intY, textHeaderPaint);
 		
 		// Draw GPS information
 		intY = width + DeltaYGpsInformation;
 		
 		// First line
-		canvas.drawText("Latitude", 10 * this.mDisplayScaledDensity, intY, textHeaderPaint);
+		canvas.drawText("Latitude", this.mCompassLayout.FirstColumnX, intY, textHeaderPaint);
 		canvas.drawText("Longitude", width / 2 - 40 * this.mDisplayScaledDensity, intY, textHeaderPaint);
 		canvas.drawText("Altitude", width - 80 * this.mDisplayScaledDensity, intY, textHeaderPaint);
 
 		// Second line
-		canvas.drawText("Satellites", 10 * this.mDisplayScaledDensity, intY + 38 * this.mDisplayScaledDensity, textHeaderPaint);
+		canvas.drawText("Satellites", this.mCompassLayout.FirstColumnX, intY + 38 * this.mDisplayScaledDensity, textHeaderPaint);
 		canvas.drawText("Accuracy", width / 4 - 10 * this.mDisplayScaledDensity, intY + 38 * this.mDisplayScaledDensity, textHeaderPaint);
 		canvas.drawText("Heading", width / 2 - 30 * this.mDisplayScaledDensity, intY + 38 * this.mDisplayScaledDensity, textHeaderPaint);
 		canvas.drawText("Last Fix", width - 130 * this.mDisplayScaledDensity, intY + 38 * this.mDisplayScaledDensity, textHeaderPaint);
@@ -316,9 +309,9 @@ public class CompassNaviView extends View
 
 		canvas.drawPicture(this.mStaticLayout);
 		
-		this.drawCompass(canvas, DeltaYCompass);
+		this.drawCompass(canvas);
 		this.drawCompassValues(canvas, DeltaYCompassValues);
-		this.drawTargetInformation(canvas, DeltaYTargetInformation);
+		this.drawTargetInformation(canvas);
 		this.drawGpsInformation(canvas, DeltaYGpsInformation);
 	}
 
@@ -326,48 +319,43 @@ public class CompassNaviView extends View
 	 * 
 	 * @param canvas
 	 */
-	private void drawCompass(Canvas canvas, int intDeltaY)
+	private void drawCompass(Canvas canvas)
 	{
-		final int intWidth = this.getWidth();
-		final int intCenterX = intWidth / 2;
-		final int intCenterY = intWidth / 2 + intDeltaY;
-		final int intRadius = intCenterX - (int)(30 * this.mDisplayScaledDensity);
-
 		canvas.save();
-		canvas.rotate(-this.mfltAzimuth, intCenterX, intCenterY);
+		canvas.rotate(-this.mfltAzimuth, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY);
 		
 		// Red triangle pointing north
 		final Path pathNorthA = new Path();
-		pathNorthA.moveTo(intCenterX, intCenterY - (intRadius * 2/3));
-		pathNorthA.lineTo(intCenterX, intCenterY);
-		pathNorthA.lineTo(intCenterX - 7 * this.mDisplayScaledDensity, intCenterY);
-		pathNorthA.lineTo(intCenterX, intCenterY - (intRadius * 2/3));
+		pathNorthA.moveTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY - this.mCompassLayout.CompassRadiusTwoThirds);
+		pathNorthA.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY);
+		pathNorthA.lineTo(this.mCompassLayout.CompassCenterX - this.mCompassLayout.CompassTriangleWidth, this.mCompassLayout.CompassCenterY);
+		pathNorthA.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY - this.mCompassLayout.CompassRadiusTwoThirds);
 		pathNorthA.close();
 		this.mNorthPaint.setColor(0xCC8B0000);
 		canvas.drawPath(pathNorthA, this.mNorthPaint);
 		final Path pathNorthB = new Path();
-		pathNorthB.moveTo(intCenterX, intCenterY - (intRadius * 2/3));
-		pathNorthB.lineTo(intCenterX + 7 * this.mDisplayScaledDensity, intCenterY);
-		pathNorthB.lineTo(intCenterX, intCenterY);
-		pathNorthB.lineTo(intCenterX, intCenterY - (intRadius * 2/3));
+		pathNorthB.moveTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY - this.mCompassLayout.CompassRadiusTwoThirds);
+		pathNorthB.lineTo(this.mCompassLayout.CompassCenterX + this.mCompassLayout.CompassTriangleWidth, this.mCompassLayout.CompassCenterY);
+		pathNorthB.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY);
+		pathNorthB.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY - this.mCompassLayout.CompassRadiusTwoThirds);
 		pathNorthB.close();
 		this.mNorthPaint.setColor(0xCC610000);
 		canvas.drawPath(pathNorthB, this.mNorthPaint);
 		
 		// Blue triangle pointing south
 		final Path pathSouthA = new Path();
-		pathSouthA.moveTo(intCenterX, intCenterY + (intRadius * 2/3));
-		pathSouthA.lineTo(intCenterX, intCenterY);
-		pathSouthA.lineTo(intCenterX - 7 * this.mDisplayScaledDensity, intCenterY);
-		pathSouthA.lineTo(intCenterX, intCenterY + (intRadius * 2/3));
+		pathSouthA.moveTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY + this.mCompassLayout.CompassRadiusTwoThirds);
+		pathSouthA.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY);
+		pathSouthA.lineTo(this.mCompassLayout.CompassCenterX - this.mCompassLayout.CompassTriangleWidth, this.mCompassLayout.CompassCenterY);
+		pathSouthA.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY + this.mCompassLayout.CompassRadiusTwoThirds);
 		pathSouthA.close();
 		this.mSouthPaint.setColor(0xCC000061);
 		canvas.drawPath(pathSouthA, this.mSouthPaint);
 		final Path pathSouthB = new Path();
-		pathSouthB.moveTo(intCenterX, intCenterY + (intRadius * 2/3));
-		pathSouthB.lineTo(intCenterX + 7 * this.mDisplayScaledDensity, intCenterY);
-		pathSouthB.lineTo(intCenterX, intCenterY);
-		pathSouthB.lineTo(intCenterX, intCenterY + (intRadius * 2/3));
+		pathSouthB.moveTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY + this.mCompassLayout.CompassRadiusTwoThirds);
+		pathSouthB.lineTo(this.mCompassLayout.CompassCenterX + this.mCompassLayout.CompassTriangleWidth, this.mCompassLayout.CompassCenterY);
+		pathSouthB.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY);
+		pathSouthB.lineTo(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY + this.mCompassLayout.CompassRadiusTwoThirds);
 		pathSouthB.close();
 		this.mSouthPaint.setColor(0xCC00008B);
 		canvas.drawPath(pathSouthB, this.mSouthPaint);
@@ -375,7 +363,7 @@ public class CompassNaviView extends View
 		canvas.restore();
 
 		// Draw a black circle in the middle
-		canvas.drawCircle(intCenterX, intCenterY, 4 * this.mDisplayScaledDensity, this.mCenterPaint);
+		canvas.drawCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, 4 * this.mDisplayScaledDensity, this.mCenterPaint);
 
 		// Draw arrow pointing to the destination
 		if (this.mCurrentLocation != null)
@@ -389,26 +377,28 @@ public class CompassNaviView extends View
 			
 			// Set arrow color according to distance
 			this.mArrowPaint.setColor(color);
-			this.drawShortLine(canvas, intCenterX, intCenterY, intRadius * 2/3, intRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees, this.mArrowPaint);
-			
+			this.drawShortLine(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadiusTwoThirds, this.mCompassLayout.CompassRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees, this.mArrowPaint);
+
 			// Create the tip of the arrow
 			final Path pathArrow = new Path();
-			final Point pointStart = this.calculatePointOnCircle(intCenterX, intCenterY, intRadius, fltArrowDegrees);
+			final Point pointStart = this.calculatePointOnCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadius, fltArrowDegrees);
 			pathArrow.moveTo(pointStart.x, pointStart.y);
-			Point point = this.calculatePointOnCircle(intCenterX, intCenterY, intRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees - 3);
+			Point point = this.calculatePointOnCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees - 3);
 			pathArrow.lineTo(point.x, point.y);
-			point = this.calculatePointOnCircle(intCenterX, intCenterY, intRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees + 3);
+			point = this.calculatePointOnCircle(this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadius - (int)(10 * this.mDisplayScaledDensity), fltArrowDegrees + 3);
 			pathArrow.lineTo(point.x, point.y);
 			pathArrow.lineTo(pointStart.x, pointStart.y);
 			pathArrow.close();
 			canvas.drawPath(pathArrow, this.mArrowPaint);
 			
+			// Draw distance on arrow
 			final String strDistance = this.getDistance(fltDistance);
 			this.mArrowTextPaint.setColor(color);
-			this.drawRotatedTextOnCircle(canvas, intCenterX, intCenterY, intRadius + (int)(5 * this.mDisplayScaledDensity), fltArrowDegrees, strDistance, this.mArrowTextPaint);
+			this.drawRotatedTextOnCircle(canvas, this.mCompassLayout.CompassCenterX, this.mCompassLayout.CompassCenterY, this.mCompassLayout.CompassRadius + (int)(5 * this.mDisplayScaledDensity), fltArrowDegrees, strDistance, this.mArrowTextPaint);
 
-			canvas.drawText(strDistance, 10 * this.mDisplayScaledDensity, intDeltaY + 25 * this.mDisplayScaledDensity, this.mTextValuePaint);
-			canvas.drawText(String.format("%.0f¡", fltBearing), intWidth - 40 * this.mDisplayScaledDensity, intDeltaY + 25 * this.mDisplayScaledDensity, this.mTextValuePaint);
+			// Write distance and bearing information into Header section
+			canvas.drawText(strDistance, this.mCompassLayout.FirstColumnX, this.mCompassLayout.TargetInformationBearingValueY, this.mTextValuePaint);
+			canvas.drawText(String.format("%.0f¡", fltBearing), this.mDisplayWidthInPixel - 50 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationBearingValueY, this.mTextValuePaint);
 		}
 	}
 
@@ -421,7 +411,7 @@ public class CompassNaviView extends View
 		final int intWidth = this.getWidth();
 		final int intY = intWidth;
 		
-		canvas.drawText(String.format("%.0f¡", this.mfltAzimuth), 10 * this.mDisplayScaledDensity, intY + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
+		canvas.drawText(String.format("%.0f¡", this.mfltAzimuth), this.mCompassLayout.FirstColumnX, intY + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
 		canvas.drawText(this.getDirectionForDegrees(this.mfltAzimuth), intWidth - 50 * this.mDisplayScaledDensity, intY + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
 	}
 	
@@ -429,14 +419,14 @@ public class CompassNaviView extends View
 	 * 
 	 * @param canvas
 	 */
-	private void drawTargetInformation(Canvas canvas, int intDeltaY)
+	private void drawTargetInformation(Canvas canvas)
 	{
 		final int intWidth = this.getWidth();		
 		final CoordinateHelper coordinateHelper = new CoordinateHelper(this.mTarget.getLatitude(), this.mTarget.getLongitude());
-		
-		canvas.drawText(this.mTarget.getName(), 10 * this.mDisplayScaledDensity, intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
-		canvas.drawText(coordinateHelper.getLatitudeString(), intWidth / 2 - 35 * this.mDisplayScaledDensity, intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
-		canvas.drawText(coordinateHelper.getLongitudeString(), intWidth - 100 * this.mDisplayScaledDensity, intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
+
+		canvas.drawText(this.mTarget.getName(), this.mCompassLayout.FirstColumnX, this.mCompassLayout.TargetInformationTargetValueY, this.mTextValuePaint);
+		canvas.drawText(coordinateHelper.getLatitudeString(), intWidth / 2 - 35 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationTargetValueY, this.mTextValuePaint);
+		canvas.drawText(coordinateHelper.getLongitudeString(), intWidth - 100 * this.mDisplayScaledDensity, this.mCompassLayout.TargetInformationTargetValueY, this.mTextValuePaint);
 	}
 
 	/**
@@ -452,7 +442,7 @@ public class CompassNaviView extends View
 		if (this.mCurrentLocation != null)
 		{
 			final CoordinateHelper coordinateHelper = new CoordinateHelper(this.mCurrentLocation.getLatitude(), this.mCurrentLocation.getLongitude());
-			canvas.drawText(coordinateHelper.getLatitudeString(), 10 * this.mDisplayScaledDensity, intWidth + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
+			canvas.drawText(coordinateHelper.getLatitudeString(), this.mCompassLayout.FirstColumnX, intWidth + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
 			canvas.drawText(coordinateHelper.getLongitudeString(), intWidth / 2 - 40 * this.mDisplayScaledDensity, intWidth + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);
 			final String strAltitude = this.getAltitude(this.mCurrentLocation.getAltitude());
 			canvas.drawText(strAltitude, intWidth - 80 * this.mDisplayScaledDensity, intWidth + intDeltaY + 16 * this.mDisplayScaledDensity, this.mTextValuePaint);

@@ -423,19 +423,28 @@ public class CompassNaviActivity extends Activity implements SensorEventListener
 
         html.append("</html>");
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		alertDialog.setTitle(R.string.menu_sat_info);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.menu_sat_info);
+        
+        // final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		// alertDialog.setTitle(R.string.menu_sat_info);
 
 		final WebView message = new WebView(this);
 		message.loadDataWithBaseURL(null, html.toString(), "text/html", "utf-8", null);
-		alertDialog.setView(message);
-		alertDialog.setButton("OK", new DialogInterface.OnClickListener()
+		builder.setView(message);
+		// alertDialog.setView(message);
+		builder.setCancelable(false);
+		// alertDialog.setButton("OK", new DialogInterface.OnClickListener()
+		builder.setNegativeButton("OK", new DialogInterface.OnClickListener()
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
-				return;
+				dialog.cancel();
+				// return;
 			}
 		});
+		
+		final AlertDialog alertDialog = builder.create();
 		alertDialog.show();
     }
     

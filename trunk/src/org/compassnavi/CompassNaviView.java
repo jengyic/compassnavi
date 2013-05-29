@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.location.Location;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -70,6 +72,8 @@ public class CompassNaviView extends View
 	public CompassNaviView(Context context)
 	{
 		this(context, null);
+		
+		this.initViewProperties();
 	}
 	
 	/**
@@ -80,6 +84,8 @@ public class CompassNaviView extends View
 	public CompassNaviView(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
+		
+		this.initViewProperties();
 	}
 	
 	/**
@@ -92,10 +98,15 @@ public class CompassNaviView extends View
 	{
 		super(context, attrs, defStyle);
 
+		this.initViewProperties();
+		
 		this.mContext = context;
 		this.mDisplayWidthInPixel = this.mContext.getResources().getDisplayMetrics().widthPixels;
 		this.mDisplayHeightInPixel = this.mContext.getResources().getDisplayMetrics().heightPixels;
 		this.mDisplayScaledDensity = this.mContext.getResources().getDisplayMetrics().scaledDensity;
+		
+		// String t = "Width: " + this.mDisplayWidthInPixel + " Height: " + this.mDisplayHeightInPixel + " Density: " + this.mDisplayScaledDensity;
+		// Toast.makeText(context, t, Toast.LENGTH_LONG).show();
 		
 		this.mCompassLayout = new CompassLayout(this.mDisplayWidthInPixel, this.mDisplayHeightInPixel, this.mDisplayScaledDensity);
 
@@ -106,6 +117,11 @@ public class CompassNaviView extends View
 		this.createStaticLayout();
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initViewProperties()
+	{
+        this.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // Required to make overlays work properly!
+	}
 	/**
 	 * 
 	 */
